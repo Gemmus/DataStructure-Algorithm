@@ -5,7 +5,7 @@
 // - add = enqueue, offer()
 // - remove = dequeue, poll()
 
-// Use of stacks:
+// Use of queue:
 // - keyboard buffer
 // - printer queue
 // - LinkedLists, PriorityQueues, Breadth-first search
