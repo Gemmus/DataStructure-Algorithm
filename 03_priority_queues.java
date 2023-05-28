@@ -30,6 +30,5 @@ public class Main{
 		while(!queue2.isEmpty()) {
 			System.out.println(queue2.poll());
 		}
-		
 	}
 }
