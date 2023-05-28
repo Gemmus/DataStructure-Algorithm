@@ -36,6 +36,5 @@ public class Main{
 		System.out.println(stack.peek());  // to see what's on the top of the stack
 			
 		System.out.println(stack.search("Warhammer 40k")); // starts counting from top where top = 1; if none found, prints -1
-		
 	}
 }
