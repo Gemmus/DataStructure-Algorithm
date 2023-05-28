@@ -3,12 +3,12 @@
 // Nodes are in non-consecutive memory locations
 // - modes are linked using pointers
 
-// 				      Singly Linked List: 
-// 		 Node 				 Node  				 Node
+// 		    Singly Linked List: 
+//       Node 	             Node  	         Node
 // [data | address] -> [data | address] -> [data | address]
 
-// 					  Doubly Linked List: 
-// 			  Node 							 Node
+// 		    Doubly Linked List: 
+// 	      Node                           Node
 // [address | data | address ] -> [address | data | address ]
 
 // Advantages: 
@@ -63,11 +63,11 @@ public class Main{
 		linkedList2.poll();
 		System.out.println(linkedList2); // --> [B, C, D, F]
 		
-		/////////////////////////////////////////////////////////////
-		// LinkedList allows insertion and deletion of notes       //
-		// unlike Arrays or ArrayList                              // 
-		// but there is no random access to the LinkedList         //
-		/////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////
+		// LinkedList allows insertion and deletion of notes //
+		// unlike Arrays or ArrayList                        // 
+		// but there is no random access to the LinkedList   //
+		///////////////////////////////////////////////////////
 		
 		LinkedList<String> linkedList3 = new LinkedList<String>();
 		
@@ -97,7 +97,6 @@ public class Main{
 		String last  = linkedList3.removeLast();
 		System.out.println(last);
 		
-		System.out.println(linkedList3);
-				
+		System.out.println(linkedList3);	
 	}
 }
