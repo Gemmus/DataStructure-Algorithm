@@ -8,8 +8,6 @@
 // - shifting elements is time consuming	O(n)
 // - expanding/shrinking the array is time consuming	O(n)
 
-import java.util.ArrayList;
-
 public class Main{
 	
 	public static void main(String[] args) {
