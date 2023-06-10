@@ -48,7 +48,7 @@ public class Main{
 			System.out.println(key.hashCode() % 10 + "\t" + key + "\t" + table1.get(key)); // % 10: refers to the size of the bucket
 		}
 		
-		System.out.println("\n");
+		System.out.println();
 		
 		///////////////////////////////////////////////////
 		// Creating Hash Table with String and String:   //
