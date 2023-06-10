@@ -1,5 +1,6 @@
 // Depth First Search (DFS):
 // A search algorithm for traversing a tree or graph data structure.
+// Uses a stack.
 
 // 1. Pick a route.
 // 2. Keep going until you reach a dead end, or a previously visited node.
