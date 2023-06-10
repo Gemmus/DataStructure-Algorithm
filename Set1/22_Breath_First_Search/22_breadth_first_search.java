@@ -3,7 +3,7 @@
 // This is done one "Level" at a time, rather than one "branch" at a time.
 
 // Traverse a graph level by level.
-// Utilizes a queue.
+// Utilizes a Queue.
 // Better if destination is on average close to start.
 // Siblings are visited before children.
 
