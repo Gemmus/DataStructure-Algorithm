@@ -20,6 +20,7 @@ public class Main{
 		
 		graph.addEdge(0, 1); // A is connected to B
 		graph.addEdge(1, 2); // B is connected to C
+		graph.addEdge(1, 4); // B is connected to E
 		graph.addEdge(2, 3); // C is connected to D
 		graph.addEdge(2, 4); // C is connected to E
 		graph.addEdge(4, 0); // E is connected to A
