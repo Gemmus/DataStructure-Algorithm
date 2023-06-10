@@ -12,11 +12,11 @@ public class Main{
 		
 		Graph graph = new Graph(5);
 		
-		graph.addNode(new Node('A'));
-		graph.addNode(new Node('B'));
-		graph.addNode(new Node('C'));
-		graph.addNode(new Node('D'));
-		graph.addNode(new Node('E'));
+		graph.addNode(new Node('A')); // index = 0
+		graph.addNode(new Node('B')); // index = 1
+		graph.addNode(new Node('C')); // index = 2
+		graph.addNode(new Node('D')); // index = 3
+		graph.addNode(new Node('E')); // index = 4
 		
 		graph.addEdge(0, 1); // A is connected to B
 		graph.addEdge(1, 2); // B is connected to C
