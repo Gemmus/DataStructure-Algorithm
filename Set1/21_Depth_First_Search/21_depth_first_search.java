@@ -1,10 +1,15 @@
 // Depth First Search (DFS):
 // A search algorithm for traversing a tree or graph data structure.
-// Uses a stack.
 
 // 1. Pick a route.
 // 2. Keep going until you reach a dead end, or a previously visited node.
 // 3. Backtrack to last node that has unvisited adjacent neighbors.
+
+// Traverse a graph branch by branch.
+// Utilizes a Stack.
+// Better if destination is on average far from the start.
+// Children are visited before siblings.
+// More popular for games/puzzles.
 
 public class Main{
 	
