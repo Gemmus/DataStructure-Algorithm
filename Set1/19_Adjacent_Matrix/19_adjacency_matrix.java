@@ -4,7 +4,7 @@
 //                        # of columns =     # of unique nodes
 
 // Runtime complexity to check an Edge: O(1).
-// Space complexity: O(v²)
+// Space complexity: O(v²).
 
 public class Main{
 	
