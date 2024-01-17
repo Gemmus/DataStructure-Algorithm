@@ -30,7 +30,7 @@ function, class Time has the following member functions:
 1. read that is used to read time (minutes and hours) from the keyboard.
 2. lessThan that is used to compare two times.
 3. subtract that is used to calculate time difference between two times.
-4. display that is used to display time in the format hh:mm.1
+4. display that is used to display time in the format hh:mm.
 */
 
 #include <iostream>
