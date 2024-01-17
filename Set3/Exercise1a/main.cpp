@@ -39,12 +39,17 @@ using namespace std;
 
 class Time {
 public:
-    Time(int hours0 = 0, int minutes0 = 0) {
+    explicit Time(int hours0 = 0, int minutes0 = 0) {
         hours = hours0;
         minutes = minutes0;
     }
 
-    ~Time() {}
+    Time(const Time &t) {
+        hours = t.hours;
+        minutes = t.minutes;
+    }
+
+    ~Time() = default;
 
     void read(const string &str0) {
         int aux_hours, aux_minutes;
@@ -68,7 +73,7 @@ public:
         minutes = aux_minutes;
     }
 
-    bool lessThan(const Time &t2) {
+    bool lessThan(const Time &t2) const {
         if (hours < t2.hours) {
             return true;
         } else if (hours == t2.hours) {
@@ -82,11 +87,11 @@ public:
         }
     }
 
-    Time subtract(const Time &t3) {
+    Time subtract(const Time &t3) const {
         Time aux;
         if (minutes < t3.minutes) {
-            aux.minutes = t3.minutes - minutes;
-            aux.hours = hours - t3.hours- 1;
+            aux.minutes = (60 - t3.minutes) + minutes;
+            aux.hours = hours - t3.hours - 1;
         } else {
             aux.minutes = minutes - t3.minutes;
             aux.hours = hours - t3.hours;
@@ -94,7 +99,7 @@ public:
         return aux;
     }
 
-    void display() {
+    void display() const {
         if (hours < 10) {
             cout << "0";
         }
@@ -104,7 +109,6 @@ public:
             cout << "0";
         }
         cout << minutes << endl;
-
     }
 
 private:
