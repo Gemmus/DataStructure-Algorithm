@@ -1,4 +1,4 @@
-/*  Exercise 1a (Using a class, 0.5p) 
+/*  Exercise 1a (Using a class, 0.5p)
 
 We need to write an application, which reads two times (times are represented by two int numbers: hours and minutes)
 from the keyboard. Then the program finds out which time is later. After that it calculates the time difference between
@@ -95,7 +95,16 @@ public:
     }
 
     void display() {
-        cout << hours << ":" << minutes << endl;
+        if (hours < 10) {
+            cout << "0";
+        }
+        cout << hours << ":";
+
+        if (minutes < 10) {
+            cout << "0";
+        }
+        cout << minutes << endl;
+
     }
 
 private:
