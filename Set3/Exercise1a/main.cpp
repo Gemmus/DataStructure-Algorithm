@@ -53,7 +53,7 @@ public:
 
         cout << "Please enter the hours: ";
         cin >> aux_hours;
-        while (aux_hours < 0 || aux_hours > 24) {
+        while (aux_hours < 0 || aux_hours > 23) {
             cout << "Invalid input, please enter the correct hours: ";
             cin >> aux_hours;
         }
@@ -61,7 +61,7 @@ public:
 
         cout << "Please enter the minutes: ";
         cin >> aux_minutes;
-        while (aux_minutes < 0 || aux_minutes > 60) {
+        while (aux_minutes < 0 || aux_minutes > 59) {
             cout << "Invalid input, please enter the correct minutes: ";
             cin >> aux_minutes;
         }
