@@ -1,4 +1,6 @@
-/* We need to write an application, which reads two times (times are represented by two int numbers: hours and minutes)
+/*  Exercise 1a (Using a class, 0.5p) 
+
+We need to write an application, which reads two times (times are represented by two int numbers: hours and minutes)
 from the keyboard. Then the program finds out which time is later. After that it calculates the time difference between
 these times. Finally, the program displays the smaller (earlier) time and the time difference (duration) in the format
         starting time was 11:22
