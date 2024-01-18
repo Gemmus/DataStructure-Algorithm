@@ -61,7 +61,7 @@ public:
         minutes = aux_minutes + 60 * aux_hours;
     }
 
-    [[nodiscard]] bool lessThan(const Time &t2) const {
+    [[nodiscard]] bool lessThan(Time &t2) {
         if (minutes < t2.minutes) {
             return true;
         }
@@ -75,8 +75,8 @@ public:
     }
 
     void display() const {
-        int hours = minutes / 60;
-        int temp_min = minutes % 60;
+        int hours = abs(minutes / 60);
+        int temp_min = abs(minutes % 60);
         if (hours < 10) {
             cout << "0";
         }
@@ -86,11 +86,12 @@ public:
             cout << "0";
         }
         cout << temp_min;
-
     }
 
     Time operator-(const Time &right) const {
-        return this->subtract(right);
+        Time diff = *this;
+        diff.minutes = right.minutes - diff.minutes;
+        return diff;
     }
 
     Time operator+(const Time &right) const {
@@ -99,7 +100,7 @@ public:
         return sum;
     }
 
-    bool operator<(const Time &t) const {
+    bool operator<(Time &t) {
         return lessThan(t);
     }
 
