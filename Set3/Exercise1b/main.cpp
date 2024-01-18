@@ -80,32 +80,22 @@ public:
         minutes = aux_minutes + 60 * aux_hours;
     }
 
-    bool lessThan(const Time &t2) const {
+    [[nodiscard]] bool lessThan(const Time &t2) const {
         if (minutes < t2.minutes) {
             return true;
         }
         return false;
     }
 
-    Time subtract(const Time &t3) const {
+    [[nodiscard]] Time subtract(const Time &t3) const {
         Time difference;
         difference.minutes = minutes - t3.minutes;
         return difference;
     }
 
     void display() const {
-#if 0
-        int hours = 0;
-        int temp_min = minutes;
-
-        while (temp_min > 59) {
-            temp_min -= 60;
-            hours++;
-        }
-#else
         int hours = minutes / 60;
         int temp_min = minutes % 60;
-#endif
         if (hours < 10) {
             cout << "0";
         }
@@ -115,8 +105,7 @@ public:
             cout << "0";
         }
         cout << temp_min;
-        //cout << setiosflags(ios::right); out << setfill('0') << setw(2) << hours;
-        //cout << ":" << setfill('0') << setw(2) << minutes
+
     }
 
     Time operator-(const Time &right) const {
