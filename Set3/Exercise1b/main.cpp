@@ -1,36 +1,17 @@
-/*  Exercise 1a (Using a class, 0.5p)
+/*  Exercise 1b (Function/operator overloading. Extra exercise, 0,25p)
 
-We need to write an application, which reads two times (times are represented by two int numbers: hours and minutes)
-from the keyboard. Then the program finds out which time is later. After that it calculates the time difference between
-these times. Finally, the program displays the smaller (earlier) time and the time difference (duration) in the format
-        starting time was 11:22
-        duration was 1:04
+Modify your Time class from the mandatory exercise in such a way the following program works
+int main(){
+    Time start, end, duration;
 
-The main function that does these things looks as follows:
-int main() {
-    Time time1, time2, duration;
-    time1.read("Enter time 1");
-    time2.read("Enter time 2");
-    if (time1.lessThan(time2)) {
-        duration = time2.subtract(time1);
-        cout << "Starting time was ";
-        time1.display();
-    } else {
-        duration = time1.subtract(time2);
-        cout << "Starting time was ";
-        time2.display();
-    }
-    cout << "Duration was ";
-    duration.display();
+    cout << "Enter starting time "; cin >> start;
+    cout << "Enter ending time "; cin >> end;
+    duration = start < end ? end - start : start - end;
+    cout << "Duration " << duration << endl;
+    cout << "Starting time was " << end - duration << endl;
+    cout << "Ending time was " << start + duration << endl;
     return 0;
 }
-
-Now you need to define and implement class Time so that the program starts working. As can be seen from the main
-function, class Time has the following member functions:
-1. read that is used to read time (minutes and hours) from the keyboard.
-2. lessThan that is used to compare two times.
-3. subtract that is used to calculate time difference between two times.
-4. display that is used to display time in the format hh:mm.
 */
 
 #include <iostream>
