@@ -34,6 +34,7 @@ function, class Time has the following member functions:
 */
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -50,22 +51,24 @@ public:
     ~Time() = default;
 
     void read(const string &str0) {
+        string input;
         int aux_hours, aux_minutes;
+        bool received_valid = false;
 
-        cout << str0 << endl;
+        cout << str0;
 
-        cout << "Please enter the hours: ";
-        cin >> aux_hours;
-        while (aux_hours < 0 || aux_hours > 23) {
-            cout << "Invalid input, please enter the correct hours: ";
-            cin >> aux_hours;
-        }
-
-        cout << "Please enter the minutes: ";
-        cin >> aux_minutes;
-        while (aux_minutes < 0 || aux_minutes > 59) {
-            cout << "Invalid input, please enter the correct minutes: ";
-            cin >> aux_minutes;
+        while (!received_valid) {
+            getline(cin, input);
+            istringstream is(input);
+            if (is >> aux_hours >> aux_minutes) {
+                if (aux_hours >= 0 && aux_hours <= 23 && aux_minutes >= 0 && aux_minutes <= 59) {
+                    received_valid = true;
+                } else {
+                    cout << "Invalid time. Please enter valid time (hh mm): ";
+                }
+            } else {
+                cout << "Invalid input. Please enter correct format (hh mm): ";
+            }
         }
 
         minutes = aux_minutes + 60 * aux_hours;
@@ -85,15 +88,8 @@ public:
     }
 
     void display() const {
-
-        int hours = 0;
-        int temp_min = minutes;
-
-        while (temp_min > 59) {
-            temp_min -= 60;
-            hours++;
-        }
-
+        int hours = abs(minutes / 60);
+        int temp_min = abs(minutes % 60);
         if (hours < 10) {
             cout << "0";
         }
@@ -111,8 +107,8 @@ private:
 
 int main() {
     Time time1, time2, duration;
-    time1.read("Enter time 1");
-    time2.read("Enter time 2");
+    time1.read("Enter time 1: ");
+    time2.read("Enter time 2: ");
     if (time1.lessThan(time2)) {
         duration = time2.subtract(time1);
         cout << "Starting time was ";
