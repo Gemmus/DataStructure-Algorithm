@@ -71,14 +71,14 @@ public:
         minutes = aux_minutes + 60 * aux_hours;
     }
 
-    bool lessThan(const Time &t2) const {
+    [[nodiscard]] bool lessThan(const Time &t2) const {
         if (minutes < t2.minutes) {
             return true;
         }
         return false;
     }
 
-    Time subtract(const Time &t3) const {
+    [[nodiscard]] Time subtract(const Time &t3) const {
         Time difference;
         difference.minutes = minutes - t3.minutes;
         return difference;
@@ -88,7 +88,7 @@ public:
 
         int hours = 0;
         int temp_min = minutes;
-        
+
         while (temp_min > 59) {
             temp_min -= 60;
             hours++;
