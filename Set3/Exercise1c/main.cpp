@@ -59,7 +59,6 @@ public:
     ~Time() = default;
 
     void read(const string &str0) {
-
         string input;
         int aux_hours, aux_minutes;
         bool received_valid = false;
