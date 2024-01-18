@@ -89,8 +89,8 @@ public:
     }
 
     Time operator-(const Time &right) const {
-        Time diff = *this;
-        diff.minutes = right.minutes - diff.minutes;
+        Time diff = this->subtract(right);
+        diff.minutes *= -1;
         return diff;
     }
 
