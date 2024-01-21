@@ -21,9 +21,9 @@ int main () {
     cout << "Enter items (hh mm)? ";
     cin >> item;
     while (!(item == Time(0, 0))) {
-        //list.insert_to_begin(item);
-        //list.insert_to_end(item);
-        list.insert(item);
+        //list.insert_to_begin(item);     // Exercise 3a
+        //list.insert_to_end(item);       // Testing
+        list.insert(item);              // Exercise 3b
         cin >> item;
     }
     //Print the contents of the list
