@@ -68,4 +68,5 @@ void infixTopostfix(char *infix, char *postfix) {
     for (int k = 0; k <= stack.readTop() + 1; k++) {
         stack.pop(postfix[j++]);
     }
+    postfix[j] = '\0';
 }
