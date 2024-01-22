@@ -46,7 +46,6 @@ where the variable number is declared as: int number;. isdigit() a standard macr
 
 #include <iostream>
 #include <ctype.h>
-#include <string>
 #include "stack.h"
 
 using namespace std;
@@ -55,14 +54,12 @@ int main() {
 
     Stack<int> stack;
     int digit, digit1, digit2;
-    string str;
     char input;
     bool not_quit = true;
 
     while (not_quit) {
         cout << "Enter input: ";
-        getline(cin, str);
-        input = str[0];
+        cin >> input; cin.ignore(1);
         if ('Q' == input) {
             cout << "\nQuiting. ";
             if (stack.readTop() != -1) {
