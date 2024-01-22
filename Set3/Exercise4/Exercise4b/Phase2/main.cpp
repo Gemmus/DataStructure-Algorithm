@@ -22,8 +22,8 @@ parenthesis that control the order of evaluation. For example
 
 using namespace std;
 
-int precedence(char ch);
-bool isOperand(char chr);
+int precedence(const char& ch);
+bool isOperand(const char& chr);
 void infixTopostfix(char *infix, char *postfix);
 
 int main() {
@@ -41,7 +41,7 @@ int main() {
     return 0;
 }
 
-int precedence(char chr){
+int precedence(const char& chr){
     switch(chr) {
         case '-':
         case '+':
@@ -54,7 +54,7 @@ int precedence(char chr){
     }
 }
 
-bool isOperand(char chr) {
+bool isOperand(const char& chr) {
     return ('+' == chr || '-' == chr ||'*' == chr || '/' == chr);
 }
 
@@ -90,6 +90,6 @@ void infixTopostfix(char *infix, char *postfix) {
         }
         chr = infix[++i];
     }
-    
+
     postfix[j] = '\0';
 }
