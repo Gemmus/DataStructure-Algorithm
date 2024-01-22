@@ -87,10 +87,9 @@ int main() {
             }
         } else if ('=' == input) {
             stack.print();
+        } else {
+            cout << "Invalid input. ";
         }
-        else {
-                cout << "Invalid input. ";
-            }
     }
 
     return 0;
