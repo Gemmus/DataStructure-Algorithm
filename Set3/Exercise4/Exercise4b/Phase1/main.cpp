@@ -45,8 +45,6 @@ int main() {
     cout << "Give an infix equation at one line" << endl;
     cin.getline(infix, MAX_LENGTH);
 
-    cout << infix << endl;
-
     infixTopostfix(infix, postfix);
 
     cout << "Equivalent postfix equation is " << postfix << endl;
