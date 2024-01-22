@@ -57,8 +57,9 @@ int main() {
     char input;
     bool not_quit = true;
 
+    cout << "This is a RPN calculator. Enter operands and operators:" << endl;
+
     while (not_quit) {
-        cout << "Enter input: ";
         cin >> input; cin.ignore(1);
         if ('Q' == input) {
             cout << "\nQuiting. ";
@@ -83,7 +84,7 @@ int main() {
                 cout << "Operation " << input << "cannot be executed, not enough operands on stack." << endl << endl;
             }
         } else if ('=' == input) {
-            stack.print();
+            stack.topValue();
         } else {
             cout << "Invalid input. ";
         }
