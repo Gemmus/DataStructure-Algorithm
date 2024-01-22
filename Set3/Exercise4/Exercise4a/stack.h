@@ -1,5 +1,5 @@
 //Interface for ADT stack
-#define MAXN 5
+#define MAXN 80
 
 using namespace std;
 
@@ -14,6 +14,7 @@ public:
 	bool pop(T &item);
 	void print();
     int readTop();
+    void topValue();
 };
 
 
@@ -47,7 +48,7 @@ template <class T>
 void Stack<T>::print() {
     int i;
 
-    cout << "\nStack is : ";
+    cout << "\nStack contained: ";
         for (i = top; i >= 0 ; i-- )
             //cout << endl << array[i];
             cout << " " << array[i];
@@ -58,4 +59,9 @@ void Stack<T>::print() {
 template <class T>
 int Stack<T>::readTop() {
     return top;
+}
+
+template <class T>
+void Stack<T>::topValue() {
+    cout << "Top value is " << array[top] << endl;
 }
