@@ -30,8 +30,8 @@ Queue<T>::Queue() {
 template <class T>
 Queue<T>::Queue(const Queue &q0) {
     number_of_items = q0.number_of_items;
-    if (number_of_items % 5 != 0) {
-        array = new T[((number_of_items % 5) + 1) * MAXN];
+    if (number_of_items % MAXN != 0) {
+        array = new T[((number_of_items % MAXN) + 1) * MAXN];
     } else {
         array = new T[number_of_items];
     }
