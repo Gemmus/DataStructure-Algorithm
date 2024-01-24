@@ -33,10 +33,10 @@ This application writes to the console
 0.469391
 0.011902
 0.337123
-Mean m1 is 0.627944
-Mean m2 is 0.627944
+Mean m1 is 0.627994
+Mean m2 is 0.627994
 
-This is incorrect (the first mean should be 0.527944). What is the reason for this, and how
+This is incorrect (the first mean should be 0.527994). What is the reason for this, and how
 to fix it? (Note: using the STL vector data structure is not allowed)
 Hint: you need one additional operation function to the Measurements class
 */
