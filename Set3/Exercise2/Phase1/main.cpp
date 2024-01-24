@@ -19,7 +19,7 @@ don’t know beforehand (at the compile time) how many items there will be on th
 measurement file. You can reserve space from the dynamic memory by using a new
 operator. This function will return a pointer to the newly created memory block.
 
-Notice: the given measurement file should give 0.527944 as the mean.
+Notice: the given measurement file should give 0.527994 as the mean.
 
 */
 
