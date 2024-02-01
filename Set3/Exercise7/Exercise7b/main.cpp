@@ -22,9 +22,9 @@ int main () {
     cout << "Enter items (hh mm)? ";
     cin >> item;
     while (!(item == Time(0, 0))) {
-        list.insert_to_begin(item);
+        list.insert(item);
+        //list.insert_to_begin(item);
         //list.insert_to_end(item);
-
         cin >> item;
     }
     //Print the contents of the list
