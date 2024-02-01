@@ -59,16 +59,23 @@ LinkedList<T>::~LinkedList() {
 template <class T>
 LinkedList<T>& LinkedList<T>::insert(T data) {
     Node *newnode = new Node(data);
+
     if (first == NULL) {
         first = newnode;
         cout << "Linked list was empty. Now has one node which value is: " << first->_value << endl;
+    } else if (newnode->_value < first->_value) {
+        insert_to_begin(newnode->_value);
     } else {
-        Node *what = first;
-        while (what->_value < newnode->_value && what->_pNext != NULL) {
-            what = what->_pNext;
+        Node *current = first;
+        Node *previous = nullptr;
+
+        while (current != nullptr && current->_value < newnode->_value) {
+            previous = current;
+            current = current->_pNext;
         }
-        newnode->_pNext = what->_pNext;
-        what->_pNext = newnode;
+        previous->_pNext = newnode;
+        newnode->_pNext = current;
+
         cout << "New node inserted which value is: " << newnode->_value << endl;
     }
     return *this;
