@@ -75,19 +75,19 @@ int main() {
     vector<int> lottoVector2(LOTTO_N);
     vector<int> matching;
 
-    // Generating Lotto numbers:
+    // Generating Lotto1 numbers:
     generate(lottoVector1.begin(), lottoVector1.end(), RandomGenerator(MIN, MAX));
     cout << "First lotto row: ";
     copy(lottoVector1.begin(), lottoVector1.end(), ostream_iterator<int> (cout, " "));
     cout << endl;
 
-    // Generating Viking lotto numbers:
+    // Generating Lotto2 numbers:
     generate(lottoVector2.begin(), lottoVector2.end(), RandomGenerator(MIN, MAX));
     cout << "Second lotto row: ";
     copy(lottoVector2.begin(), lottoVector2.end(), ostream_iterator<int> (cout, " "));
     cout << endl;
 
-    // Matching numbers of lotto and viking lotto:
+    // Matching numbers of lotto1 and lotto2:
     sort(lottoVector1.begin(), lottoVector1.end());
     sort(lottoVector2.begin(), lottoVector2.end());
     set_intersection(lottoVector1.begin(), lottoVector1.end(), lottoVector2.begin(), lottoVector2.end(), back_inserter(matching));
