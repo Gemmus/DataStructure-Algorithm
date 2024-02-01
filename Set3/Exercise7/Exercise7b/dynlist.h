@@ -24,6 +24,7 @@ private:
 public:
     LinkedList();
     ~LinkedList();
+    LinkedList<T>& insert(T data);
     LinkedList<T>& insert_to_begin(T data);
     LinkedList<T>& insert_to_end(T data);
     void print(std::ostream &out) const;
@@ -53,6 +54,24 @@ LinkedList<T>::~LinkedList() {
         aux1 = aux2;
 
     }
+}
+
+template <class T>
+LinkedList<T>& LinkedList<T>::insert(T data) {
+    Node *newnode = new Node(data);
+    if (first == NULL) {
+        first = newnode;
+        cout << "Linked list was empty. Now has one node which value is: " << first->_value << endl;
+    } else {
+        Node *what = first;
+        while (what->_value < newnode->_value && what->_pNext != NULL) {
+            what = what->_pNext;
+        }
+        newnode->_pNext = what->_pNext;
+        what->_pNext = newnode;
+        cout << "New node inserted which value is: " << newnode->_value << endl;
+    }
+    return *this;
 }
 
 template <class T>
@@ -143,19 +162,19 @@ void LinkedList<T>::delete_last() {
 
 template <class T>
 void LinkedList<T>::del(int position) {
-    if (position < 0 || position >= size()) {
+    if (position < 1 || position > size()) {
         cerr << "Invalid position for deletion." << endl;
         return;
     }
 
     Node *delAux = first;
 
-    if (position == 0) {
+    if (position == 1) {
         first = first->_pNext;
         delete delAux;
         cout << "Node deleted at position " << position << "." << endl;
     } else {
-        for (int i = 0; i < position - 1; i++) {
+        for (int i = 1; i < position - 1; i++) {
             delAux = delAux->_pNext;
         }
         Node *toBeDeleted = delAux->_pNext;
@@ -169,7 +188,7 @@ void LinkedList<T>::del(int position) {
 template <class T>
 bool LinkedList<T>::find_pos(T item, int *pos) {
     Node *toBeFound = new Node(item);
-    int index = 0;
+    int index = 1;
     bool found = false;
 
     if (first == NULL) {
@@ -210,8 +229,8 @@ T& LinkedList<T>::operator[](int position) {
     Node *search = first;
     int index = 0;
 
-    if (position < size()) {
-        while (search != NULL && index < position) {
+    if (position <= size()) {
+        while (search != NULL && index < position - 1) {
             search = search->_pNext;
             index++;
         }
