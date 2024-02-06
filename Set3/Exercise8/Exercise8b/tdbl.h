@@ -16,7 +16,7 @@ private:
 
         Node() : _pNext(NULL), _pPrev(NULL) {}
         Node(T val) : _value(val), _pNext(NULL), _pPrev(NULL) {}
-        Node(T val, Node *next, Node *prev) : _value(val), _pNext(next), _pPrev(NULL) {}
+        Node(T val, Node *next, Node *prev) : _value(val), _pNext(next), _pPrev(prev) {}
     };
 
     Node *first;
