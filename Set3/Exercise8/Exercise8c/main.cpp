@@ -103,22 +103,21 @@ public:
     }
 };
 
-////////////////////////////////////////
-//    Node struct for linked list:    //
-////////////////////////////////////////
-struct Node {
-    int col;
-    Item* item;
-    Node* next;
-    Node(int c, Item* i) : col(c), item(i), next(nullptr) {}
-};
-
 /////////////////////////////////////////////////
 //   Matrix class to represent sparse matrix   //
 /////////////////////////////////////////////////
 class Matrix {
 private:
+    class Node {
+    public:
+        int col;
+        Item* item;
+        Node* next;
+        Node(int c, Item* i) : col(c), item(i), next(nullptr) {}
+    };
+
     map<int, Node*> rows;
+
 public:
     ~Matrix() {
         for (auto& row : rows) {
@@ -197,6 +196,6 @@ int main() {
     matrix[91][75] = new Complex(-1, 2);
     matrix[91][99] = new Char('b');
     cout << matrix;
-   //cout << "Cell (1,52) has content " << *(matrix[1][52]);
+    //cout << "Cell (1,52) has content " << *(matrix[1][52]);
     return EXIT_SUCCESS;
 }
