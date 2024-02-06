@@ -1,107 +1,201 @@
-/* tdbl.h -- Dynamic doubly linked linear list */
+/* Exercise 8c. (Sparse matrix using linked lists, voluntary, 0.5p)
+
+Warning! This is not an easy one (maybe the most difficult exercise in this course).
+
+In this exercise sparse matrix using universal item (see exercise 6b) will be created. Sparse matrix is a matrix where
+most of the cells are empty. Therefore, it is efficient to implement the matrix using linked lists.
+
+Test your solution with the following application:
+        int main() {
+            Matrix matrix;
+            matrix[1][1] = new Char('a');
+            matrix[1][52] = new String("Zilog");
+            matrix[43][1] = new Int(64);
+            matrix[76][43] = new Int(46);
+            matrix[91][75] = new Complex(-1, 2);
+            matrix[91][99] = new Char('b');
+            cout << matrix;
+            cout << "Cell (1,52) has content " << *(matrix[1][52]);
+            return EXIT_SUCCESS;
+        }
+
+You should get something like this as an output:
+ 1:  1:            a  52:       Zilog
+ 43: 1:           64
+ 76: 43:          46
+ 91: 75: (-1.0, 2.0)  99:       b
+ Cell (1,52) has content 52:       Zilog
+ */
 
 #include <iostream>
+#include <map>
+#include <cstdlib>
+#include <iomanip>
 
 using namespace std;
 
-// Interface of doubly linked list
-template <typename T>
-class Tdbl {
+/////////////////////////////////
+//   Base class for elements   //
+/////////////////////////////////
+class Item {
+public:
+    virtual ~Item() {}
+    virtual void print(ostream& os) const = 0;
+};
+
+//////////////////////////////////////////
+//   Derived classes from base class:   //
+//////////////////////////////////////////
+/*     Char     */
+class Char : public Item {
+private:
+    char value;
+public:
+    explicit Char(char value0 = '\0') {
+        value = value0;
+    }
+    void print(ostream& os) const override {
+        os.width(12);
+        os << right << value << " ";
+    }
+};
+
+/*    String    */
+class String : public Item {
+private:
+    string value;
+public:
+    explicit String(const string& value0 = "") {
+        value = value0;
+    }
+    void print(ostream& os) const override {
+        os.width(12);
+        os << right << value << " ";
+    }
+};
+
+/*     Int     */
+class Int : public Item {
+private:
+    int value;
+public:
+    explicit Int(int value0 = 0) {
+        value = value0;
+    }
+    void print(ostream& os) const override {
+        os.width(12);
+        os << right << value << " ";
+    }
+};
+
+/*   Complex   */
+class Complex : public Item {
+private:
+    double real;
+    double imaginary;
+public:
+    explicit Complex(double real0 = 0.0, double imaginary0 = 0.0) {
+        real = real0;
+        imaginary = imaginary0;
+    }
+    void print(ostream& os) const override {
+        os << " (" << fixed << setprecision(1) << real << ", " << fixed << setprecision(1) << imaginary << ") ";
+    }
+};
+
+/////////////////////////////////////////////////
+//   Matrix class to represent sparse matrix   //
+/////////////////////////////////////////////////
+class Matrix {
 private:
     class Node {
     public:
-        T _value;
-        Node *_pNext;
-        Node *_pPrev;
-
-        Node() : _pNext(NULL), _pPrev(NULL) {}
-        Node(T val) : _value(val), _pNext(NULL), _pPrev(NULL) {}
-        Node(T val, Node *next, Node *prev) : _value(val), _pNext(next), _pPrev(prev) {}
+        int col;
+        Item* item;
+        Node* next;
+        Node(int c, Item* i) : col(c), item(i), next(nullptr) {}
     };
 
-    Node *first;
-    Node *last;
+    map<int, Node*> rows;
 
 public:
-    Tdbl();
-    ~Tdbl();
-    Tdbl<T> &insert_to_front(T data);
-    Tdbl<T> &insert_to_back(T data);
-    void print() const;
-    void print_reverse() const;
+    ~Matrix() {
+        for (auto& row : rows) {
+            Node* node = row.second;
+            while (node) {
+                Node* aux = node;
+                node = node->next;
+                delete aux->item;
+                delete aux;
+            }
+        }
+    }
+
+    /*   Overloading operator[]    */
+    class Proxy {
+        map <int, Node*>& row;
+        int col;
+    public:
+        Proxy(map<int, Node*>& row0, int col0) : row(row0), col(col0) {}
+
+        Item*& operator[](int c) {
+            if (row.find(col) == row.end()) {
+                row[col] = new Node(c, nullptr);
+                return row[col]->item;
+            } else {
+                Node* current = row[col];
+                while (current) {
+                    if (current->col == c)
+                        return current->item;
+                    if (current->next == nullptr) {
+                        current->next = new Node(c, nullptr);
+                        return current->next->item;
+                    }
+                    current = current->next;
+                }
+            }
+            return row[col]->item;
+        }
+    };
+
+    Proxy operator[](int column) {
+        return Proxy(rows, column);
+    }
+
+    /*   Overloading operator<<    */
+    friend ostream& operator<<(ostream& os, const Matrix& matrix0) {
+        for (auto& row : matrix0.rows) {
+            os.width(3);
+            os << right << row.first << ": ";
+            Node *node = row.second;
+            while (node) {
+                if (node->item) {
+                    os.width(3);
+                    os << right << node->col << ": ";
+                    node->item->print(os);
+                    os << "\t";
+                }
+                node = node->next;
+            }
+            os << endl;
+        }
+        return os;
+    }
+
 };
 
-// Implementation of doubly linked list
-template <class T>
-Tdbl<T>::Tdbl() {
-    first = NULL;
-    last = NULL;
-}
-
-template <class T>
-Tdbl<T>::~Tdbl() {
-    Node *aux1, *aux2;
-
-    aux1 = first;
-    while (aux1 != NULL) {
-        aux2 = aux1->_pNext;
-        delete aux1;
-        //printf("\nDeleted."); //for testing purposes
-        aux1 = aux2;
-    }
-}
-
-template <class T>
-Tdbl<T>& Tdbl<T>::insert_to_front(T data) {
-    Node *newnode = new Node(data);
-    if (first == NULL) {
-        first = newnode;
-        //cout << "Linked list was empty. Now has one node which value is: " << first->_value << endl;
-    } else {
-        Node *what;
-        what = newnode;
-        what->_pNext = first;
-        first->_pPrev = what;
-        first = what;
-        //cout << "New node inserted to front which value is: " << newnode->_value << endl;
-    }
-    return *this;
-}
-
-template <class T>
-Tdbl<T>& Tdbl<T>::insert_to_back(T data) {
-    Node *newnode = new Node(data);
-    if (first == NULL) {
-        first = newnode;
-        //cout << "Linked list was empty. Now has one node which value is: " << first->_value << endl;
-    } else {
-        newnode->_pPrev = last;
-        last->_pNext = newnode;
-        //cout << "New node inserted to end which value is: " << newnode->_value << endl;
-    }
-    last = newnode;
-
-    return *this;
-}
-
-template <class T>
-void Tdbl<T>::print() const {
-    Node *what;
-    cout << "\nList:";
-    what = first;
-    while (what != NULL) {
-        cout << " " << what->_value << " ";
-        what = what->_pNext;
-    }
-}
-
-template <class T>
-void Tdbl<T>::print_reverse() const {
-    Node *what;
-    cout << "\nList:";
-    what = last;
-    while (what != NULL) {
-        cout << " " << what->_value << " ";
-        what = what->_pPrev;
-    }
+//////////////////////////
+//   Test Application   //
+//////////////////////////
+int main() {
+    Matrix matrix;
+    matrix[1][1] = new Char('a');
+    matrix[1][52] = new String("Zilog");
+    matrix[43][1] = new Int(64);
+    matrix[76][43] = new Int(46);
+    matrix[91][75] = new Complex(-1, 2);
+    matrix[91][99] = new Char('b');
+    cout << matrix;
+    //cout << "Cell (1,52) has content " << *(matrix[1][52]);
+    return EXIT_SUCCESS;
 }
