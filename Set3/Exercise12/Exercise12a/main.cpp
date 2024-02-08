@@ -107,13 +107,13 @@ int main() {
 
 #else
 
-    // create the test input signal sequence
+    // Creates the test input signal sequence:
     const int N = 8;
     cx input[N];
     for (int i = 0; i < N; i++)
         input[i] = cx(i, -i);  // linear ramp for real part, negative ramp for imaginary part
 
-    // Measure execution time of fft() 30 times, storing each measured time into vector
+    // Measures execution time of fft() 30 times, storing each measured time into vector:
     const int run_func_N_times = 30;
     vector<double> execution_times;
 
@@ -130,6 +130,7 @@ int main() {
     sort(execution_times.begin(), execution_times.end());
     execution_times.erase(execution_times.end() - 10, execution_times.end());
 
+    // Displays the execution times:
     cout << "Execution times after sorting and disregarding largest 10 values: ";
     for (int i = 0; i < execution_times.size(); i++) {
         if (i % 10 == 0) {
@@ -138,14 +139,14 @@ int main() {
         cout << execution_times[i] << "\t";
     }
 
-    // Calculate mean and deviation:
+    // Calculates mean and deviation:
     double mean, std_deviation;
 
     mean = accumulate(execution_times.begin(), execution_times.end(), 0.0) / (double)execution_times.size();
     std_deviation = sqrt(accumulate(execution_times.begin(), execution_times.end(), 0.0,[&](const double &accumulator, const double &val) {
                                         return accumulator + pow(val - mean, 2);}) / (double)(execution_times.size() - 1));
 
-    // Display:
+    // Displays mean and standard deviation:
     cout << "\n\nMean: " << mean << " nanoseconds" << endl;
     cout << "Standard deviation: " << std_deviation << " nanoseconds" << endl;
 
