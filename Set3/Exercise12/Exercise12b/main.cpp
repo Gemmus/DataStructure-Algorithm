@@ -90,11 +90,110 @@ the parallelization process (thread creation/deletion times, etc.).
 #include <cmath>
 #include <fstream>
 #include <iomanip>
+#include <future>
+#include <thread>
 
 using namespace std;
 
-typedef complex<double> cx;
+static const double PI = 3.14159265359;
 
+typedef complex<double> cx;
+// radix-2 in-place FFT, n must be 2^k (e.g. 2,4,6,...)
+
+/* UNOPT or Original */
+void fft_unopt(int n, cx x[]) {
+    const cx J(0, 1);
+    // check the trivial case
+    if (n == 1)
+        return;
+
+    // perform two sub-transforms
+    int n2 = n/2; // size of sub-transform
+    cx *xe = new cx[n2];
+    cx *xo = new cx[n2];
+    for (int i = 0; i < n2; i++) { // perform n/2 DIF 'butterflies'
+        xe[i] = x[i] + x[i+n2];	                     // even subset
+        xo[i] = (x[i] - x[i+n2])*exp(-J*(2*PI*i/n)); // odd subset
+    }
+    fft_unopt(n2, xe);
+    fft_unopt(n2, xo);
+
+    // construct the result vector
+    for (int k = 0; k < n2; k++) {
+        x[2*k]   = xe[k]; // even k
+        x[2*k+1] = xo[k]; // odd k
+    }
+
+    delete[] xe;
+    delete[] xo;
+}
+
+/* UNOPT_BR */
+
+/* SINGLE */
+void fft_single(int n, cx x[]) {
+    const cx J(0, 1);
+    // check the trivial case
+    if (n == 1)
+        return;
+
+    // perform two sub-transforms
+    int n2 = n/2; // size of sub-transform
+    cx *xe = new cx[n2];
+    cx *xo = new cx[n2];
+    for (int i = 0; i < n2; i++) { // perform n/2 DIF 'butterflies'
+        xe[i] = x[i] + x[i+n2];	                     // even subset
+        xo[i] = (x[i] - x[i+n2])*exp(-J*(2*PI*i/n)); // odd subset
+    }
+    fft_unopt(n2, xe);
+    fft_unopt(n2, xo);
+
+    // construct the result vector
+    for (int k = 0; k < n2; k++) {
+        x[2*k]   = xe[k]; // even k
+        x[2*k+1] = xo[k]; // odd k
+    }
+
+    delete[] xe;
+    delete[] xo;
+}
+
+/* SINGLE_BR */
+
+/* PARALLEL */
+void fft_parallel(int n, cx x[]) {
+    const cx J(0, 1);
+    // check the trivial case
+    if (n == 1)
+        return;
+
+    // perform two sub-transforms
+    int n2 = n / 2; // size of sub-transform
+
+    // Divide the input array 'x' into two subparts
+    cx *xe = x;           // First half of 'x'
+    cx *xo = x + n2;      // Second half of 'x'
+
+    // Launch two threads to process the subparts concurrently
+    thread t1(fft_parallel, n2, xe);
+    thread t2(fft_parallel, n2, xo);
+
+    // Wait for both threads to finish
+    t1.join();
+    t2.join();
+
+    // Combine the results
+    for (int k = 0; k < n2; k++) {
+        cx t = xo[k] * exp(-J * (2 * PI * k / n)); // Twiddle factor
+        xo[k] = xe[k] + t;       // Combine even and odd parts
+        xe[k] = xe[k] - t;       // Combine even and odd parts
+    }
+}
+
+/* PARAL_BR */
+
+
+/* Measure class */
 class Measure {
 public:
     virtual void measure(double &mean, double &st_dev) = 0;
@@ -109,13 +208,21 @@ protected:
             auto start = std::chrono::high_resolution_clock::now();
             func(n, input);
             auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
-            execution_times.emplace_back((double)duration.count());
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+            execution_times.push_back((double)duration.count());
         }
 
         // Sorts and disregards the largest 10 values:
         sort(execution_times.begin(), execution_times.end());
         execution_times.erase(execution_times.end() - 10, execution_times.end());
+
+        /* cout << "Execution times after sorting and disregarding largest 10 values: ";
+        for (int i = 0; i < execution_times.size(); i++) {
+            if (i % 10 == 0) {
+                cout << endl;
+            }
+            cout << execution_times[i] << "\t";
+        } */
 
         // Calculates mean and deviation:
         mean = accumulate(execution_times.begin(), execution_times.end(), 0.0) / (double)execution_times.size();
@@ -126,9 +233,11 @@ protected:
     cx *input;
 };
 
-class FFTTestbed : public Measure{
+/* FFTTestbed */
+class FFTTestbed : public Measure {
 public:
     FFTTestbed(void (*func)(int, cx[]), int n) {
+        N = n;
         this->func = func;
         input = new cx[n];
         for (int i = 0; i < n; i++) {
@@ -146,58 +255,65 @@ public:
 
 private:
     void (*func)(int, cx[]);
-    const int N = 8;
+    int N;
 };
-
-// radix-2 in-place FFT, n must be 2^k (e.g. 2,4,6,...)
-void fft(int n, cx x[]) {
-    const cx J(0, 1);
-    const double PI = 3.14159265359;
-    // check the trivial case
-    if (n == 1)
-        return;
-
-    // perform two sub-transforms
-    int n2 = n/2; // size of sub-transform
-    cx *xe = new cx[n2];
-    cx *xo = new cx[n2];
-    for (int i = 0; i < n2; i++) { // perform n/2 DIF 'butterflies'
-        xe[i] = x[i] + x[i+n2];	                     // even subset
-        xo[i] = (x[i] - x[i+n2])*exp(-J*(2*PI*i/n)); // odd subset
-    }
-    fft(n2, xe);
-    fft(n2, xo);
-
-    // construct the result vector
-    for (int k = 0; k < n2; k++) {
-        x[2*k]   = xe[k]; // even k
-        x[2*k+1] = xo[k]; // odd k
-    }
-
-    delete[] xe;
-    delete[] xo;
-}
 
 int main() {
 
+    auto start_main = std::chrono::high_resolution_clock::now();
+
     //ofstream output_file("fft_measurements.csv");
-    //output_file << "N, Mean, Standard Deviation" << endl;
-    cout << setw(7) << right << " N " << setw(12) << right << "Single" << endl;
+    //output_file << ;
+
+    cout << setw(7) << right << " N "
+            << setw(12) << right << "Unopt" << setw(17) << right << "Unopt_br"
+            << setw(12) << right << "Single" << setw(16) << right << "Single_br"
+            << setw(13) << right << "Parallel" << setw(14) << right << "Paral_br"<< endl;
 
     const int min_N = 2048;
-    const int max_N = 226144;
-    double mean, st_dev;
+    const int max_N = 262144;
+    double    mean_unopt,    mean_unopt_br,    mean_single,    mean_single_br,    mean_parallel,    mean_paral_br;
+    double   stdev_unopt,   stdev_unopt_br,   stdev_single,   stdev_single_br,   stdev_parallel,   stdev_paral_br;
 
-    for (int N = min_N; N <= max_N; N += N) {
-        auto* fftTestbed = new FFTTestbed(fft, N);
-        fftTestbed->measure(mean, st_dev);
-        //output_file << N << ", " << mean << st_dev << endl;
-        cout << setw(7) << right <<  N << ": " << setw(4) << right << (int)mean << "(+/- " << (int)st_dev*2 << ")ms" << endl;
-        delete fftTestbed;
+    for (int N = min_N; N <= max_N; N *= 2) {
+        cout << setw(7) << right <<  N << ": ";
+
+        /* UNOPT */
+        auto* unopt = new FFTTestbed(fft_unopt, N);
+        unopt->measure(mean_unopt, stdev_unopt);
+        cout << setw(4) << right << (int)mean_unopt << "(+/- " << (int)stdev_unopt * 2 << ")ms";
+
+        /* UNOPT_BR */
+        auto* unopt_br = new FFTTestbed(fft_unopt, N);  // TODO: change fft
+        unopt_br->measure(mean_unopt_br, stdev_unopt_br);
+        cout << setw(5) << right << (int)mean_unopt_br << "(+/- " << (int)stdev_unopt_br * 2 << ")ms";
+
+        /* SINGLE */
+        auto* single = new FFTTestbed(fft_single, N);
+        single->measure(mean_single, stdev_single);
+        cout << setw(5) << right << (int)mean_single << "(+/- " << (int)stdev_single * 2 << ")ms";
+
+        /* SINGLE_BR */
+        auto* single_br = new FFTTestbed(fft_single, N); // TODO: change fft
+        single_br->measure(mean_single_br, stdev_single_br);
+        cout << setw(5) << right << (int)mean_single_br << "(+/- " << (int)stdev_single_br * 2 << ")ms";
+
+        /* PARALLEL */
+        auto* parallel = new FFTTestbed(fft_single, N); // TODO: change fft
+        parallel->measure(mean_parallel, stdev_parallel);
+        cout << setw(5) << right << (int)mean_parallel << "(+/- " << (int)stdev_parallel * 2 << ")ms";
+
+        /* PARALLEL_BR */
+        auto* parallel_br = new FFTTestbed(fft_single, N); // TODO: change fft
+        parallel_br->measure(mean_paral_br, stdev_paral_br);
+        cout << setw(5) << right << (int)mean_paral_br << "(+/- " << (int)stdev_paral_br * 2 << ")ms" << endl;
     }
 
     //output_file.close();
 
+    auto end_main = std::chrono::high_resolution_clock::now();
+    auto duration_main = std::chrono::duration_cast<std::chrono::seconds>(end_main - start_main);
+    cout << "Measurements took " << duration_main.count() << "s" << endl;
 
     return EXIT_SUCCESS;
 }
