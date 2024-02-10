@@ -83,7 +83,6 @@ Hint: future, async, virtual function
 #include <cmath>
 #include <iomanip>
 #include <future>
-#include <thread>
 
 using namespace std;
 
@@ -102,6 +101,12 @@ void fft_paral_br(int n, cx x[]);
 /* Measure class */
 class Measure {
 public:
+    explicit Measure(cx *input0 = nullptr) {
+        input = input0;
+    }
+    
+    ~Measure() = default;
+
     virtual void measure(double &mean, double &st_dev) = 0;
 
 protected:
@@ -122,24 +127,16 @@ protected:
         sort(execution_times.begin(), execution_times.end());
         execution_times.erase(execution_times.end() - 10, execution_times.end());
 
-        /* cout << "Execution times after sorting and disregarding largest 10 values: ";
-        for (int i = 0; i < execution_times.size(); i++) {
-            if (i % 10 == 0) {
-                cout << endl;
-            }
-            cout << execution_times[i] << "\t";
-        } */
-
         // Calculates mean and deviation:
         mean = accumulate(execution_times.begin(), execution_times.end(), 0.0) / (double)execution_times.size();
         std_dev = sqrt(accumulate(execution_times.begin(), execution_times.end(), 0.0,[&](const double &accumulator, const double &val) {
             return accumulator + pow(val - mean, 2);}) / (double)(execution_times.size() - 1));
     }
 
-    cx *input;
+    cx *input{};
 };
 
-/* FFTTestbed class */
+/* FFTTestbed */
 class FFTTestbed : public Measure {
 public:
     FFTTestbed(void (*func)(int, cx[]), int n) {
@@ -165,7 +162,6 @@ private:
 };
 
 int main() {
-
     auto start_main = chrono::high_resolution_clock::now();
 
     cout << setw(7) << right << " N "
@@ -293,8 +289,8 @@ void fft_single(int n, cx x[]) {
         xe[i] = x[i] + x[i+n2];	                     // even subset
         xo[i] = (x[i] - x[i+n2])*exp(-J*(2*PI*i/n)); // odd subset
     }
-    fft_single(n2, xe);
-    fft_single(n2, xo);
+    fft_unopt(n2, xe);
+    fft_unopt(n2, xo);
 
     // construct the result vector
     for (int k = 0; k < n2; k++) {
@@ -328,8 +324,8 @@ void fft_single_br(int n, cx x[]) {
         x[i+n2] = odd;
     }
 
-    fft_single_br(n2, x);
-    fft_single_br(n2, x + n2);
+    fft_unopt_br(n2, x);
+    fft_unopt_br(n2, x + n2);
 
     // Rearrange the result vector
     for (int k = 0; k < n2; k++) {
