@@ -1,4 +1,4 @@
-# Exercise 12 (a-c)
+# Exercise 13 (a-c)
 
 ## Brute Force Search
 
