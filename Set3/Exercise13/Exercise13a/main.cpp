@@ -86,6 +86,7 @@ public:
         return weight;
     }
 
+
 private:
     int index;
     int value;
@@ -107,18 +108,18 @@ void readFile(const string& filePath, vector<Item>& items, int& N, int& C) {
 }
 
 void fullEnumerator(const vector<Item>& srcVector, const int& C, vector<Item>& destVector, int& opt_value, int& opt_weight) {
-    int64_t size = (int64_t)srcVector.size();
-    int64_t total_combo = (int64_t)pow(2, size); // Total number of possible solutions
+    auto size = (int64_t)srcVector.size();
+    auto total_combo = (int64_t)pow(2, size); // Total number of possible solutions
 
     opt_value = 0;
     opt_weight = 0;
 
-    for (int i = 0; i < total_combo; ++i) {
+    for (int64_t i = 0; i < total_combo; ++i) {
         vector<Item> current_combo;
         int current_value = 0;
         int current_weight = 0;
 
-        for (int j = 0; j < size; ++j) {
+        for (int64_t j = 0; j < size; ++j) {
             if (i & (1 << j)) {            // Checking if jth bit is set in the binary representation of i
                 current_combo.push_back(srcVector[j]);
                 current_value += srcVector[j].valueGetter();
@@ -135,7 +136,7 @@ void fullEnumerator(const vector<Item>& srcVector, const int& C, vector<Item>& d
 
         // Output progress every 1,000,000 solutions evaluated
         if (i % 10000000 == 0) {
-            double progress = ((double)i / total_combo) * 100;
+            double progress = ((double)i / (double)total_combo) * 100;
             cout << (int)progress << "% -> ";
         } else if (i == (total_combo - 1)) {
             cout << "100%" << endl;
@@ -168,6 +169,7 @@ int main() {
      */
 
     /* Brute force search function call and print */
+
     fullEnumerator(items, C, knapsack, opt_value, opt_weight);
     cout << "Optimal solution found: <" << opt_value << "> <" << opt_weight << ">" << endl;
     for (Item item : knapsack) {
