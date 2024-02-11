@@ -89,6 +89,7 @@ void readFile(const string& filePath, vector<Item>& items, int& N, int& C) {
         items.push_back(item);
     }
     file >> C;
+    file.close();
 }
 
 int main() {
