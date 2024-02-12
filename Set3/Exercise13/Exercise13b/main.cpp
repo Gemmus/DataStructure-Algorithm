@@ -2,7 +2,7 @@
 
 Greedy search can be applied to the 0/1 Knapsack problem, but it does not guarantee to give an optimal solution.
 
- Remember that a greedy search has the form:
+Remember that a greedy search has the form:
     "While solution not constructed select best remaining element and try adding it in."
 
 What is the sense of “best” here? I.e. what is the criterion by which the items should be ordered?
@@ -16,7 +16,8 @@ Feasible solution (not necessarily optimal) found: <value> <weight>
 <item> <item> <item> ...
 
 Run your greedy algorithm code on the two problem instances, easy.20.txt and hard33.txt.
-Compare the results of brute force search for hard33.txt (optimal solution for hard33.txt should be 22486 value units, and greedy solution should have 19388 value units; about 14% less than the optimal).
+Compare the results of brute force search for hard33.txt (optimal solution for hard33.txt should be 22486 value units,
+and greedy solution should have 19388 value units; about 14% less than the optimal).
 */
 
 #include <iostream>
@@ -127,15 +128,14 @@ void fullEnumerator(const vector<Item>& srcVector, const int& C, vector<Item>& d
 void greedy(const vector<Item>& srcVector, const int& C, vector<Item>& destVector, int& opt_value, int& opt_weight) {
     vector<Item> sortedVector = srcVector;
     int current_weight = 0;
-    int future_weight = 0;
-    cout << C << endl;
+    int future_weight;
 
     // Sorting vector based on value / weight (highest value density first)
     sort(sortedVector.begin(), sortedVector.end(), [](const Item& left, const Item& right) {
         return ((double)left.valueGetter() / left.weightGetter()) > ((double)right.valueGetter() / right.weightGetter());
     });
 
-    for (const Item& each : sortedVector) {
+    for (const Item& each : sortedVector) {  // TODO: For testing, needs removal
         cout << each << endl;
     }
 
@@ -160,11 +160,11 @@ int main() {
     /* Initialization of exec time measurement */
     auto start = chrono::high_resolution_clock::now();
 
-    /* Mode selection: brute force = 1, greedy = 2 */
+    /* Mode selection: brute force = 1, greedy = 2, greed */
     const int mode = 2;
 
     /* Locals */
-    const string file_path = "easy200.txt";
+    const string file_path = "hard33.txt";
     int C, N; // C: capacity N: total numbers of items
     int opt_value = 0;
     int opt_weight = 0;
@@ -201,6 +201,7 @@ int main() {
             cout << endl;
             break;
         default:
+            cout << "Invalid mode." << endl;
             break;
     }
 
