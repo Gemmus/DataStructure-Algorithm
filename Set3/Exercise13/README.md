@@ -1,4 +1,4 @@
-# Exercise 13 (a-c)
+# Exercise 13 (a-d)
 
 ## Brute Force Search
 
@@ -11,6 +11,7 @@
 <small>_Figure 2. Output of hard33.txt_<small>
 
 ## Greedy 0/1 Knapsack Resolving Algorithm
+
 ![image](https://github.com/Gemmus/DataStructure-Algorithm/assets/112064697/c933a27d-59fb-45fe-9880-1340a5062eb0)
 <br> 
 <small>_Figure 3. Output of easy20.txt_<small>
@@ -28,3 +29,14 @@
 <small>_Figure 6. Output of hard200.txt_<small>
 
 ## Greedy Algorithm with a Heuristic
+
+
+## Multi-threading brute force
+
+![image](https://github.com/Gemmus/DataStructure-Algorithm/assets/112064697/27dc5c02-53f3-4d57-a663-6c4eb7ce02e5)
+<br> 
+<small>_Figure 11. Output of easy20.txt_<small>
+
+![image](https://github.com/Gemmus/DataStructure-Algorithm/assets/112064697/7fb8ebd6-a521-47b7-ae05-4ee17bbc27bc)
+<br> 
+<small>_Figure 12. Output of hard33.txt_<small>
