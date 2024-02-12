@@ -12,7 +12,7 @@
 
 ## Greedy 0/1 Knapsack Resolving Algorithm
 
-![image](https://github.com/Gemmus/DataStructure-Algorithm/assets/112064697/c933a27d-59fb-45fe-9880-1340a5062eb0)
+![image](https://github.com/Gemmus/DataStructure-Algorithm/assets/112064697/8de3fa7e-4284-4f2c-a21b-5f92c1edf651)
 <br> 
 <small>_Figure 3. Output of easy20.txt_<small>
 
